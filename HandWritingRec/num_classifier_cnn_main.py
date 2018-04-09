@@ -2,7 +2,7 @@
 """
 Created on Fri Apr  6 13:41:53 2018
 
-@author: Matin
+@author: Matin rohani larijani
 """
 
 import tensorflow as tf
@@ -65,11 +65,11 @@ epochs = 10
 batch_size = 50
 
 #placeholder input
-raw_image = tf.placeholder(tf.float32, [None, 784])
-image_shaped = tf.reshape(raw_image, [-1, 28, 28, 1])
+raw_image = tf.placeholder(tf.float32, [None, 784], name = 'raw_image')
+image_shaped = tf.reshape(raw_image, [-1, 28, 28, 1], name = 'image_shaped')
 
 #placeholder output
-output = tf.placeholder(tf.float32, [None, 10])
+output = tf.placeholder(tf.float32, [None, 10], name ='output')
 
 first_layer_filter = LayerBuilder();
 
@@ -119,7 +119,7 @@ dense_layer1 = tf.nn.relu(dense_layer1)
 wd2 = tf.Variable(tf.truncated_normal([1000, 10], stddev=0.03), name='wd2')
 bd2 = tf.Variable(tf.truncated_normal([10], stddev=0.01), name='bd2')
 dense_layer2 = tf.matmul(dense_layer1, wd2) + bd2
-y_ = tf.nn.softmax(dense_layer2)
+y_ = tf.nn.softmax(dense_layer2, name='prediction')
 
 
 cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=dense_layer2, labels=output))
@@ -137,6 +137,9 @@ init_op = tf.global_variables_initializer()
 # setup recording variables
 # add a summary to store the accuracy
 tf.summary.scalar('accuracy', accuracy)
+
+# initiate a saver to save the model
+saver = tf.train.Saver()
 
 merged = tf.summary.merge_all()
 writer = tf.summary.FileWriter('PycharmProjects')
@@ -158,3 +161,5 @@ with tf.Session() as sess:
     print("\nTraining complete!")
     writer.add_graph(sess.graph)
     print(sess.run(accuracy, feed_dict={raw_image: mnist.test.images, output: mnist.test.labels}))
+    print("\nSaving the model!")
+    saver.save(sess, 'C:\\PyProjects\\nc\\number_classifier_model')
