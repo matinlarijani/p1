@@ -76,6 +76,8 @@ first_layer_filter = LayerBuilder();
 first_layer_filter.Input = image_shaped
 first_layer_filter.Input_X = 28
 first_layer_filter.Input_Y = 28
+first_layer_filter.Input_depth =1
+first_layer_filter.Output_depth =32
 first_layer_filter.Filter_X_size = 5
 first_layer_filter.Filter_Y_size = 5
 first_layer_filter.MaxPool_X_size =2
@@ -89,6 +91,8 @@ second_layer_filter = LayerBuilder();
 second_layer_filter.Input = layer1
 second_layer_filter.Input_X = 28
 second_layer_filter.Input_Y = 28
+second_layer_filter.Input_depth =32
+second_layer_filter.Output_depth =64
 second_layer_filter.Filter_X_size = 5
 second_layer_filter.Filter_Y_size = 5
 second_layer_filter.MaxPool_X_size =2
@@ -135,7 +139,7 @@ init_op = tf.global_variables_initializer()
 tf.summary.scalar('accuracy', accuracy)
 
 merged = tf.summary.merge_all()
-writer = tf.summary.FileWriter('C:\\Users\\Andy\\PycharmProjects')
+writer = tf.summary.FileWriter('PycharmProjects')
 with tf.Session() as sess:
     # initialise the variables
     sess.run(init_op)
